@@ -1,1 +1,76 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Company Officer Playbook</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1726;color:white;font:16px Arial,sans-serif}
+header,main{padding:20px;max-width:650px;margin:auto}
+header{background:#172e45}
+h1{font-size:26px}
+section{background:#1c344b;border-radius:14px;padding:18px;margin:16px 0}
+button,select{display:block;width:100%;padding:14px;margin:10px 0;font:inherit;border-radius:9px}
+button{background:#be6c33;color:white;border:0;font-weight:bold}
+select{background:white;color:#122437}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid button{margin:0}
+.hidden{display:none}
+p{line-height:1.5}
+small{color:#b6c6d6;line-height:1.5}
+</style>
+</head>
+<body>
+<header><p>COMPANY OFFICER PLAYBOOK</p><h1>The First 10 Minutes</h1><p>Interactive training prototype</p></header>
+<main>
+<section id="setup">
+<h2>Start Training</h2>
+<p>Two-story residential structure fire.</p>
+<label>Crew size</label>
+<select id="crew"><option>4-person engine</option><option>3-person engine</option></select>
+<label>Your role</label>
+<select id="role"><option>Company Officer</option><option>Engineer</option><option>Nozzle Firefighter</option><option>Backup Firefighter</option></select>
+<button onclick="start()">BEGIN INCIDENT</button>
+</section>
+<section id="incident" class="hidden">
+<h2>Engine 25 — On Scene</h2>
+<p id="conditions">Smoke showing from Division 2. Occupancy uncertain.</p>
+<h3>Building Perspective</h3>
+<div class="grid">
+<button onclick="view('Alpha')">ALPHA</button>
+<button onclick="view('Bravo')">BRAVO</button>
+<button onclick="view('Charlie')">CHARLIE</button>
+<button onclick="view('Delta')">DELTA</button>
+</div>
+<p id="viewText">Viewing Alpha side.</p>
+<h3>Crew Assignments</h3>
+<select id="task"><option>Initial size-up</option><option>Prepare attack hoseline</option><option>Confirm water supply</option><option>Support hoseline</option></select>
+<button onclick="record('Assignment issued: '+document.getElementById('task').value)">ISSUE ASSIGNMENT</button>
+<button onclick="record(document.getElementById('role').value+' acknowledged assignment')">ACKNOWLEDGE</button>
+<h3>Instructor Controls</h3>
+<button onclick="change('Layered gray smoke observed')">Layered smoke</button>
+<button onclick="change('Dense turbulent smoke observed')">Turbulent smoke</button>
+<button onclick="change('Walkout basement reported on Charlie side')">Charlie update</button>
+<button onclick="finish()">FINISH EXERCISE</button>
+<p id="message"></p>
+</section>
+<section id="review" class="hidden">
+<h2>After-Action Review</h2>
+<div id="log"></div>
+<button onclick="location.reload()">START AGAIN</button>
+</section>
+<small>TRAINING DEMONSTRATION ONLY. Illustrative conditions, not a validated fire-dynamics model. No multiplayer or audio recording in this version. No UL FSRI endorsement implied. Follow local SOPs and qualified training supervision.</small>
+</main>
+<script>
+let events=[];
+function show(id){for(const x of ['setup','incident','review'])document.getElementById(x).classList.toggle('hidden',x!==id);scrollTo(0,0)}
+function record(x){events.push(x);document.getElementById('message').textContent=x}
+function start(){if(document.getElementById('crew').selectedIndex===1&&document.getElementById('role').value==='Backup Firefighter'){alert('Select an available three-person crew role');return}events=['Started: '+document.getElementById('crew').value];show('incident')}
+function view(side){let d={Alpha:'Front entrance and upper-floor smoke',Bravo:'Side windows and access',Charlie:'Rear access, building height unknown',Delta:'Narrow side access'};document.getElementById('viewText').textContent=side+': '+d[side];record('Viewed '+side)}
+function change(x){document.getElementById('conditions').textContent=x;record('Instructor: '+x)}
+function finish(){let box=document.getElementById('log');box.replaceChildren();events.forEach(x=>{let p=document.createElement('p');p.textContent=x;box.append(p)});show('review')}
+</script>
+</body>
+</html>
